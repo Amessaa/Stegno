@@ -1,28 +1,40 @@
 import React from "react";
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import  Button  from "react-bootstrap/Button";
-import {Link} from "react-router-dom";
-// import  Button  from "react-bootstrap/Button";
+import { NavLink } from "react-router-dom";
 
 
-export default function PNavbar() {
-  return (
-    <>
-      <Navbar bg="dark" data-bs-theme="dark">
-        <Container>
-          <Navbar.Brand href="#home">Pigeon</Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
-          </Nav>
-        </Container>
-
-        <Link to="/signup" type="button" variant="primary">Sign in</Link>{' '}
-        <Link to="/login" type="button" variant="primary">Log in</Link>{' '}
-      </Navbar>
-    </>
-  );
-}
+//navbar-dark bg-dark
+//bg-body-tertiary
+function Navbar(props) {
+    return (
+      <>  
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div className="container-fluid">
+      <NavLink className="navbar-brand" to="/">StegoFrog</NavLink>
+      <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon"></span>
+      </button>
+      <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+          <li className="nav-item">
+            <NavLink className="nav-link active" aria-current="page" to="/">Home</NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink className="nav-link" to="/signup">signup</NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink className="nav-link" to="/login">login</NavLink>
+          </li>
+        </ul>
+        <form className="d-flex" role="search">
+          <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+          <button className="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+      </>
+    );
+  }
+  
+  
+  export default Navbar;

@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import { FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { useNavigate } from "react-router-dom"; // Correct import for navigation
+import PNavbar from "../components/navbar.jsx";
 
 import "./login.css";
 import Modal from "../components/modal";
@@ -17,7 +18,9 @@ export default function Login() {
   };
 
   return (
-    <Form className="wrapper">
+    <>
+    <PNavbar />
+     <Form className="wrapper">
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <MdEmail className="icon" />
@@ -48,5 +51,6 @@ export default function Login() {
         You are now Logged in !!
       </Modal>
     </Form>
+    </>
   );
 }

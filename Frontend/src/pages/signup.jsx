@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-
+import PNavbar from "../components/navbar.jsx";
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 
@@ -33,6 +33,8 @@ export default function Signup() {
   };
 
   return (
+    <>
+    <PNavbar />
     <Form className="wrapper">
       <Form.Group className="mb-3">
         <Form.Label>User-name</Form.Label>
@@ -80,5 +82,7 @@ export default function Signup() {
         <Link to="/login">Login</Link>
       </Form.Group>
     </Form>
+    </>
+    
   );
 }
