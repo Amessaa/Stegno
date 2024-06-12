@@ -4,6 +4,7 @@ var bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
+const Feedback = require("./models/Feedback");
 //youtube soln.cookie parser call krre hai taki cookies get krle and ye help krta hai vo use krne me = req.cookies.pigeonJWT in cookiecheck.js
 const cookieParser = require("cookie-parser");
 router.use(cookieParser()); //middle ware hai taki kabhi bhi ye parser call ho to middle warecall jojaye
@@ -79,6 +80,43 @@ router.post('/login', async (req,res)=>{
     }
 });
 
+router.post("/feedback", async (req, res) => {
+    const { name, email, message } = req.body;
+  
+    if (!name || !email || !message) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+    try {
+      const newFeedback = new Feedback({ name, email, message });
+       await newFeedback.save();
+      res
+        .status(201)
+        .json({ message: "Feedback submitted successfully" })
+      //   .send(newFeedback);
+    } catch (error) {
+      console.error("Error saving feedback:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+
+router.get('/search', async (req, res) => {
+    const query = req.query.nickname;
+   console.log('Recieved', query);
+    if (!query) {
+      console.log('Name query parameter is missing');
+      return res.status(400).json({ error: 'username query parameter is required' });
+    }
+  
+    try {
+      const users = await User.find({ nickname: new RegExp(query, 'i') }); // Case-insensitive search
+      console.log('Found users:', users); // Log the results
+      res.status(200).json(users);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 
 router.get('/usercokkie', cookiecheck, async (req,res)=>{
     console.log("middle ware call hora");
