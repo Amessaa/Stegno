@@ -16,12 +16,11 @@ const MODAL_STYLES = {
 export default function Modal({ open, children, onclose, navigateto }) {
   const navigate = useNavigate();
   const navigateHome = () => {
-    navigate("/home");
+    navigate("/");
   };
   return ReactDom.createPortal(
     open && (
       <>
-        {/* <div style={OVERLAY_STYLES} /> */}
         <div style={MODAL_STYLES}>
           {children}
           <div style={{ display: "flex" }}>

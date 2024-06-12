@@ -14,6 +14,7 @@ export default function Home() {
       <div className="homepage">
         <Splinemodel />
       </div>
+
       {/* <h1 style={{textAlign:"center"}}>lets explore what stag do?</h1> */}
       <About/>
     </>

@@ -6,9 +6,10 @@ import Login from "../pages/login";
 import Home from "../pages/home";
 import Steganography from "../pages/stagt2p";
 import Stag2 from "../pages/stagp2t";
-import PNavbar from "./navbar.jsx";
 
-
+import FeedbackForm from "../pages/feedback";
+import SearchBar from "./search";
+import PNavbar from "./navbar"
 
 export default function Proutes() {
   
@@ -24,6 +25,8 @@ export default function Proutes() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/stagt" element={<Steganography />}></Route>
         <Route path="/stagp" element={<Stag2 />}></Route>
+        <Route path="/feedback" element={<FeedbackForm/>}></Route>
+        <Route path="/search" element={<SearchBar/>}></Route>
       </Routes>
     </BrowserRouter>
 
