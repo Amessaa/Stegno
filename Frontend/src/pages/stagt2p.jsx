@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
-import PNavbar from "../components/navbar.jsx";
+
 import "./stag.css";
 import Modal from "../components/modal";
-// import Navbar from "../components/navbar.jsx";
+import SearchBar from "../components/search";
 
 const Steganography = () => {
   const [fileUploaded, setFileUploaded] = useState(false);
@@ -77,10 +77,14 @@ const Steganography = () => {
     document.body.removeChild(link);
   };
 
+  const handleSelectUser = (userId) => {
+    setreciever(userId);
+    console.log(reciever);
+  };
+
   return (
-    <>
-    {/* <Navbar /> */}
     <div className="body">
+      <SearchBar  onSelectUser={handleSelectUser}/>
       <div className="container">
         <h1>Steganography Tool</h1>
         <div className="upload-section">
@@ -142,7 +146,6 @@ const Steganography = () => {
         <canvas ref={imageCanvasRef} style={{ display: "none" }}></canvas>
       </div>
     </div>
-    </>
   );
 };
 

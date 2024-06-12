@@ -2,7 +2,6 @@ import React from "react";
 import { useState, useRef, useEffect } from "react";
 import "./stag.css";
 import Modal from "../components/modal";
-// import PNavbar from "../components/navbar.jsx";
 
 export default function Stag2() {
   const [fileUploaded, setFileUploaded] = useState(false);
@@ -83,11 +82,9 @@ export default function Stag2() {
 
   return (
     <>
-
-      {/* <Navbar/> */}
       <div className="container">
         <input type="file" onChange={handleImageUpload} />
-        <button onClick={() => extractMessage(5)} disabled={!fileUploaded}>
+        <button onClick={() => extractMessage(24)} disabled={!fileUploaded}>
           Extract Message
         </button>
 
