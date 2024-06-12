@@ -4,6 +4,15 @@ var bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
+//youtube soln.cookie parser call krre hai taki cookies get krle and ye help krta hai vo use krne me = req.cookies.pigeonJWT in cookiecheck.js
+const cookieParser = require("cookie-parser");
+router.use(cookieParser()); //middle ware hai taki kabhi bhi ye parser call ho to middle warecall jojaye
+
+
+const cookiecheck = require("./cookiecheck");
+
+
+
 router.get('/', (req,res)=>{
     res.send("hello");
 });
@@ -11,9 +20,9 @@ router.get('/', (req,res)=>{
 
 router.post('/register', async (req,res)=>{
 
-    const {username,password}=req.body;
+    const {nickname,username,password}=req.body;
 
-    if(!username || !password){
+    if(!nickname || !username || !password){
         return res.status(422).json({message: "fill all the fields"});
     }
 
@@ -25,7 +34,7 @@ router.post('/register', async (req,res)=>{
         return res.status(422).json({message: "username already Exists !!"});
        }
 
-       const new_user = new User({username  , password });
+       const new_user = new User({nickname , username  , password });
 
       await new_user.save();
       res.status(201).json({message:"User Registered Successfully"});
@@ -68,6 +77,14 @@ router.post('/login', async (req,res)=>{
     }catch(err){
         console.log(err);
     }
-})
+});
+
+
+router.get('/usercokkie', cookiecheck, async (req,res)=>{
+    console.log("middle ware call hora");
+    res.send(req.rootUser);
+    
+});
+
 module.exports = router;
 // kyu export krra hai jbki conn.js me to nhi krna pdra export...... and kb kb export krna pdta h???;

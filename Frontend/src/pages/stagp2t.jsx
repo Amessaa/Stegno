@@ -1,24 +1,29 @@
 import React from "react";
-import { useState , useRef} from "react";
+import { useState, useRef, useEffect } from "react";
 import "./stag.css";
 import Modal from "../components/modal";
+// import PNavbar from "../components/navbar.jsx";
 
 export default function Stag2() {
-    const [fileUploaded, setFileUploaded] = useState(false);
-    const [image, setImage] = useState(null);
-    const [extractedMessage, setExtractedMessage] = useState("");
-    const imageCanvas2Ref = useRef(null);
+  const [fileUploaded, setFileUploaded] = useState(false);
+  const [image, setImage] = useState(null);
+  const [extractedMessage, setExtractedMessage] = useState("");
+  const [receiver, setReceiver] = useState("");
+  const [sender, setSender] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const user = "56789";
+  const imageCanvas2Ref = useRef(null);
 
-    const handleImageUpload = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-          const url = URL.createObjectURL(file);
-          setImage(url);
-          setFileUploaded(true);
-        }
-      };
-  
-  const extractMessage = () => {
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setImage(url);
+      setFileUploaded(true);
+    }
+  };
+
+  const extractMessage = (id_length) => {
     if (!image) return;
 
     const img = new Image();
@@ -50,33 +55,46 @@ export default function Stag2() {
       }
 
       if (message.startsWith("Valid\n")) {
-        setExtractedMessage(message.slice(6).replace("\0", ""));
+        const senderID = message.substring(6, 6 + id_length);
+        const receiverID = message.substring(6 + id_length, 6 + 2 * id_length);
+        const extractedMsg = message.slice(6 + 2 * id_length).replace("\0", "");
+
+        // Update state accordingly
+        setSender(senderID);
+        setReceiver(receiverID);
+
+        // Check if the message is meant for the current user
+        if (user !== receiverID) {
+          setIsOpen(true); // Show modal if the message is not meant for the user
+        } else {
+          setExtractedMessage(extractedMsg); // Set the extracted message if it is meant for the user
+        }
       } else {
         alert("No hidden message found.");
       }
     };
   };
+  useEffect(() => {
+    console.log("User:", user);
+    console.log("Sender:", sender);
+    console.log("Receiver:", receiver);
+    console.log("Extracted Message:", extractedMessage);
+  }, [sender, receiver, extractedMessage]);
 
   return (
     <>
+
+      {/* <Navbar/> */}
       <div className="container">
-      <input type="file" onChange={handleImageUpload} />
-        <button onClick={extractMessage} disabled={!fileUploaded}>
+        <input type="file" onChange={handleImageUpload} />
+        <button onClick={() => extractMessage(5)} disabled={!fileUploaded}>
           Extract Message
         </button>
-        
+
         <canvas ref={imageCanvas2Ref} style={{ display: "none" }}></canvas>
         <div className="result">
           <p>Hidden Image:</p>
           {image && <img src={image} alt="Uploaded" width={50} height={50} />}
-
-          {/* {downloadLink && (
-            <button href={downloadLink} download="steganography_image.png">
-              Download Modified Image
-            </button>
-          )} */}
-
-          {/* <button onClick={handleDownload}>Download Modified Image</button> */}
 
           <textarea
             className="extracted-item"
@@ -84,10 +102,20 @@ export default function Stag2() {
             readOnly
             placeholder="Extracted message will appear here"
           />
+          <textarea
+            className="Sent-by"
+            value={sender}
+            readOnly
+            placeholder="The message is sent by the sender"
+          />
         </div>
-
-       
       </div>
+
+      {isOpen && (
+        <Modal open={isOpen} onclose={() => setIsOpen(false)}>
+          Alert: This message is not meant for you!!
+        </Modal>
+      )}
     </>
   );
 }

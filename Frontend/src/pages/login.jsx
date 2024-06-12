@@ -1,56 +1,95 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import { FaLock } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
-import { useNavigate } from "react-router-dom"; // Correct import for navigation
-import PNavbar from "../components/navbar.jsx";
-
+import { useNavigate } from "react-router-dom";
+// import PNavbar from "../components/navbar.jsx";
 import "./login.css";
-import Modal from "../components/modal";
 
-export default function Login() {
-  const navigate = useNavigate(); // Ensure this hook is at the top level of the functional component
-  const [isopen, setisopen] = useState(false);
-  const clickhandler = () => {
-    // navigate("/"); // Use navigate to change the route
-    setisopen(true);
+const User = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState({ username: "", password: "" });
+  const { username, password } = user;
+
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await fetch("http://localhost:5000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    });
+
+    try {
+      const data = await res.json();
+      window.alert(data.message);
+      console.log(data.message);
+      navigate("/");
+      window.location.reload();
+    } catch (err) {
+      window.alert(err);
+      console.log(err);
+    }
+  };
+
+  const gotosignup=()=>{
+    navigate("/signup");
+  }
   return (
     <>
-    <PNavbar />
-     <Form className="wrapper">
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Email address</Form.Label>
-        <MdEmail className="icon" />
-        <Form.Control type="email" placeholder="Enter email" />
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <FaLock className="icon" />
-        <Form.Control type="password" placeholder="Password" />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="Remember me" />
-      </Form.Group>
-      <Form.Group className="submit-btn">
-        <Button className="submit" onClick={clickhandler}>
-          Login
-        </Button>
-      </Form.Group>
-
-      <Modal
-        open={isopen}
-        onclose={() => {
-          setisopen(false);
-        }}
-        navigateto = {true}
-      >
-        You are now Logged in !!
-      </Modal>
-    </Form>
+      {/* <PNavbar /> */}
+        <div className="login_main">
+      <div className="wrapper">
+        <form action="">
+          <h1>Login</h1>
+          <div className="input-box">
+            <input
+              name="username"
+              value={username}
+              onChange={handleChange}
+              type="text"
+              placeholder="Username"
+              required
+            />
+            <i className="bx bxs-user"></i>
+          </div>
+          <div className="input-box">
+            <input
+              name="password"
+              value={password}
+              onChange={handleChange}
+              type="password"
+              placeholder="Password"
+              required
+            />
+            <i className="bx bxs-lock-alt"></i>
+          </div>
+          <div className="remember-forgot">
+            <label>
+              <input type="checkbox" />
+              Remember Me
+            </label>
+            <a href="#">Forgot Password</a>
+          </div>
+          <button type="submit" onClick={handleSubmit} className="btn">
+            Login
+          </button>
+          <div className="register-link">
+            <p>
+              Dont have an account? <a href="#" onClick={gotosignup}>Register</a>
+            </p>
+          </div>
+        </form>
+      </div>
+      </div>
     </>
   );
-}
+};
+
+export default User;

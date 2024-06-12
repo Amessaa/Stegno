@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
-
+import PNavbar from "../components/navbar.jsx";
 import "./stag.css";
 import Modal from "../components/modal";
+// import Navbar from "../components/navbar.jsx";
 
 const Steganography = () => {
   const [fileUploaded, setFileUploaded] = useState(false);
@@ -9,6 +10,8 @@ const Steganography = () => {
   const [message, setMessage] = useState("");
   const [downloadLink, setDownloadLink] = useState("");
   const [isopen, setisopen] = useState(false);
+  const [user, setuser] = useState("");
+  const [reciever, setreciever] = useState("");
   const imageCanvasRef = useRef(null);
 
   const handleImageUpload = (event) => {
@@ -36,7 +39,7 @@ const Steganography = () => {
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const pixelData = imageData.data;
 
-      const messageWithHeader = "Valid\n" + message;
+      const messageWithHeader = "Valid\n" + user + reciever + message;
       const binaryMessage = [];
       for (let i = 0; i < messageWithHeader.length; i++) {
         const charCode = messageWithHeader.charCodeAt(i);
@@ -75,6 +78,8 @@ const Steganography = () => {
   };
 
   return (
+    <>
+    {/* <Navbar /> */}
     <div className="body">
       <div className="container">
         <h1>Steganography Tool</h1>
@@ -85,20 +90,38 @@ const Steganography = () => {
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Enter message to hide"
             className="message-input"
+            style={{ rows: 1 }}
           />
+          <textarea
+            value={user}
+            onChange={(e) => setuser(e.target.value)}
+            placeholder="Enter user-id"
+            className="message-input"
+          />
+
+          <textarea
+            value={reciever}
+            onChange={(e) => setreciever(e.target.value)}
+            placeholder="Enter reciever's-id"
+            className="message-input"
+            style={{ rows: 1 }}
+          />
+
           <button onClick={createImageCanvas} disabled={!fileUploaded}>
             Hide Message
           </button>
 
-          <Modal
-            open={isopen}
-            onclose={() => {
-              setisopen(false);
-            }}
-            navigateto={false}            
-          >
-            Your message is now encrypted.
-          </Modal>
+          {isopen && (
+            <Modal
+              open={isopen}
+              onclose={() => {
+                setisopen(false);
+              }}
+              // navigateto={false}
+            >
+              Your message is now encrypted.
+            </Modal>
+          )}
         </div>
 
         <div className="image-section">
@@ -119,6 +142,7 @@ const Steganography = () => {
         <canvas ref={imageCanvasRef} style={{ display: "none" }}></canvas>
       </div>
     </div>
+    </>
   );
 };
 
