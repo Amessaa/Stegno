@@ -14,7 +14,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@react-three/drei": "^9.50.3",
-    "@react-three/fiber": "^8.9.2",
+    "@react-three/fiber": "^8cdcd.9.2",
     "@splinetool/react-spline": "^3.1.0",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",

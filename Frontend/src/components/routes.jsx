@@ -6,6 +6,7 @@ import Login from "../pages/login";
 import Home from "../pages/home";
 import Steganography from "../pages/stagt2p";
 import Stag2 from "../pages/stagp2t";
+
 import FeedbackForm from "../pages/feedback";
 import SearchBar from "./search";
 import PNavbar from "./navbar"

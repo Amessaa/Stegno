@@ -13,6 +13,4 @@ root.render(
    <React.StrictMode>
     <Proutes/>
    </React.StrictMode>
-    
-  
 );

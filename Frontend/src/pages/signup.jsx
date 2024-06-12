@@ -1,84 +1,101 @@
-import React from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
-
-import { FaUser, FaLock } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
-
+import React,{useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+// import PNavbar from "../components/navbar.jsx";
 import "./signup.css";
-import Modal from "../components/modal";
 
-export default function Signup() {
-  const [name, setname] = useState("");
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-  const [open, setopen] = useState(false);
 
-  const navigate = useNavigate(); // Ensure this hook is at the top level of the functional component
+const User = () => {
+    
+    const navigate = useNavigate();
+    const [user, setUser] = useState({nickname: '' , username: '', password: ''});
+    const {nickname, username, password} = user;
 
-  const clickhandler = () => {
-    // e.preventDefault(); //so that no default value is entered by mistake
-    // axios
-    //   .post("http://localhost:5000/register", { email, password })
-    //   .then((result) => {
-    //     console.log(result);
-    //     navigate("/"); //to move to home as soon as u regiter
-    //   })
-    //   .catch((err) => console.log(err));
-    setopen(true);
-    // navigate("/"); //to move to home as soon as u regiter
-  };
+    const handleChange = (e) => {
+        setUser({...user, [e.target.name] : e.target.value});
+    }
 
-  return (
-    <Form className="wrapper">
-      <Form.Group className="mb-3">
-        <Form.Label>User-name</Form.Label>
-        <FaUser className="icon" />
-        <Form.Control
-          placeholder="Enter your name"
-          onChange={(e) => setname(e.target.value)}
-        />
-      </Form.Group>
+    const handleSubmit = async (e) => {
+         e.preventDefault();
+        const res = await fetch("http://localhost:5000/register",{
+                method : "POST",
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body : JSON.stringify({
+                    nickname, username, password
+                })
+ 
+        });
 
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Email address</Form.Label>
-        <MdEmail className="icon" />
-        <Form.Control
-          type="email"
-          placeholder="Enter email"
-          onChange={(e) => setemail(e.target.value)}
-        />
-      </Form.Group>
+        try{
 
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <FaLock className="icon" />
-        <Form.Control
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setpassword(e.target.value)}
-        />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="Remember me" />
-      </Form.Group>
-      <Form.Group className="submit-btn">
-        <Button className="submit" onClick={clickhandler}>
-          Register
-        </Button>
-      </Form.Group>
+            const data = await res.json();
+            window.alert(data.message);
+            console.log(data.message)
+            navigate('/login');
+         
+        }catch(err){
+            window.alert(err);
+                console.log(err);
+        }
+        
+    }
 
-      <Modal open={open} onclose={() => setopen(false)} navigateto={true}>
-        You have been registered succesfully !!
-      </Modal>
+    const gotologin =()=>{
+        navigate('/login');
+    }
+    return (
+      <>
+      {/* <PNavbar />    */}
+        <div className="signup_main">
+      <div className="wrapper">
+        <form action="">
+          <h1>Signup</h1>
 
-      <Form.Group className="login">
-        <Form.Text>Already have an account? </Form.Text>
-        <Link to="/login">Login</Link>
-      </Form.Group>
-    </Form>
-  );
+          <div className="input-box">
+            <input
+              name='nickname' value={nickname} onChange={handleChange}
+              type="text"
+              placeholder="Enter your Name?"
+              required
+            />
+            <i className="bx bxs-lock-alt"></i>
+          </div>
+
+          <div className="input-box">
+            <input
+              name='username' value={username} onChange={handleChange}
+              type="text"
+              placeholder="Username"
+              required
+            />
+            <i className="bx bxs-user"></i>
+          </div>
+          <div className="input-box">
+            <input
+              name='password' value={password} onChange={handleChange}
+              type="password"
+              placeholder="Create New Password"
+              required
+            />
+            <i className="bx bxs-lock-alt"></i>
+          </div>
+
+          <div className="remember-forgot">
+          </div>
+          <button type='submit' onClick={handleSubmit} className="btn">
+            Register
+          </button>
+          <div className="register-link">
+            <p>
+              Already have an account? <a href="#" onClick={gotologin}>Login</a>
+            </p>
+          </div>
+        </form>
+      </div>
+      </div>
+      </>
+    );
 }
+
+export default User
