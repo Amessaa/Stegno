@@ -1,12 +1,18 @@
-const express = require('express');
-const User = require('./schema');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import User from './schema.js';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config({path:"./config.env"});
 
 const cookiecheck = async (req, res , next )=>{
     console.log("ha bhai");
         try{
 
-            const token = req.cookies.pigeonJWT; //cookies.{cookie ka name jo likhe ho vo likhna h }
+            if (!req.headers["authorization"])
+                return next(createHttpError.Unauthorized());
+              const bearerToken = req.headers["authorization"];
+              const token = bearerToken.split(" ")[1];
+              
             if(!token)console.log("kuch ni aaya bhai");
 
             console.log("ye le - " + token);
@@ -29,4 +35,4 @@ const cookiecheck = async (req, res , next )=>{
         }
 }
 
-module.exports = cookiecheck;
+export default cookiecheck;
